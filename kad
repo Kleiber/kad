@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -e
+
+export ROOTDIR="$(cd "$(dirname "${BASH_SOURCE-$0}")" && pwd)"
+
+# export all config variables
+export $(cat "$ROOTDIR/conf/config" | xargs)
+
+kad_version() {
+    local kad_version=$(cat ${ROOTDIR}/conf/VERSION)
+    echo "${CLI_NAME} version ${kad_version}"
+}
+
+kad_help() {
+    cat <<EOF
+
+kad tool helps to install and manage Kubernetes clusters.
+
+ Find more information at: https://github.com/Kleiber/kad
+
+Usage:  kad [OPTIONS] COMMAND
+
+Options:
+      --debug     Enable debug mode
+  -h, --help      Show more information about command
+  -v, --version   Show the kad version information
+
+Commands:
+  build      Build an image from a Dockerfile 
+  install    Install tools
+  push       Push an image to the Docker registry
+  registry   Manage the Docker registry  
+
+Run 'kad COMMAND --help' for more information about a given command.
+EOF
+}
+
+case ${1} in
+    registry)
+        echo $CLI_NAME
+        echo $HELM_VERSION
+        echo $KUBECTL_VERSION
+        echo $K3S_VERSION
+        echo $NAMESPACE
+        echo $DOCKER_REGISTRY
+        echo $DOCKER_TAG
+        echo $KUBECONFIG
+        ;;
+    install)
+        echo "install tools."
+        ;;
+    --version|-v)
+        kad_version
+        ;;
+    --help|-h|*)
+        kad_help
+        ;;
+esac
