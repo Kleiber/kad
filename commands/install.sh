@@ -103,7 +103,7 @@ k3s_install() {
 
     echo "Installing k3s version ${version} for ${os_type} OS..."
 
-    if [[ "${os_type}" == "linux"* || "${os_type}" == "darwin"* ]]; then
+    if [[ "${os_type}" == "linux"* ]]; then
         if [[ $(is_valid_url ${url}) ]]; then
             # install k3s
             curl -sfL ${url} | INSTALL_K3S_VERSION=${version} sh -s - --docker
