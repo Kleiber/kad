@@ -14,10 +14,10 @@ Install tools.
 Usage:  kad install [OPTIONS]
 
 Commands:
-  golang     Install golang
-  helm       Install helm client
-  kubectl    Install kubectl client
-  k3s        Install k3s lightweight kubernetes
+  golang    Install golang
+  helm      Install helm client
+  kubectl   Install kubectl client
+  k3s       Install k3s lightweight kubernetes
 
 Options:
       --debug     Enable debug mode

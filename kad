@@ -3,6 +3,7 @@ set -e
 
 export KAD_DIR="$(cd "$(dirname "${BASH_SOURCE-$0}")" && pwd)"
 
+source ${KAD_DIR}/commands/deploy.sh
 source ${KAD_DIR}/commands/install.sh
 source ${KAD_DIR}/commands/registry.sh
 source ${KAD_DIR}/commands/uninstall.sh
