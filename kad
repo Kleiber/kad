@@ -42,23 +42,33 @@ Run 'kad COMMAND --help' for more information about a given command.
 EOF
 }
 
-case ${1} in
-    deploy)
-        deploy_cmd ${2}
-        ;;
-    install)
-        install_cmd ${2}
-        ;;
-    registry)
-        registry_cmd ${2}
-        ;;
-    uninstall)
-        uninstall_cmd ${2}
-        ;;
-    --version|-v)
-        kad_version
-        ;;
-    --help|-h|*)
-        kad_help
-        ;;
-esac
+kad_cmd() {
+    local command=${1}
+
+    case ${command} in
+        deploy)
+            shift
+            deploy_cmd ${@}
+            ;;
+        install)
+            shift
+            install_cmd ${@}
+            ;;
+        registry)
+            shift
+            registry_cmd ${@}
+            ;;
+        uninstall)
+            shift
+            uninstall_cmd ${@}
+            ;;
+        --version | -v)
+            kad_version
+            ;;
+        --help | -h | *)
+            kad_help
+            ;;
+    esac
+}
+
+kad_cmd ${@}
