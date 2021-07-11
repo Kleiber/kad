@@ -122,11 +122,11 @@ k3s_install() {
     echo "Installing k3s version ${version} for ${os_type} OS..."
 
     if [[ "${os_type}" == "linux"* ]]; then
-        local url=https://get.k3s.io
+        local url=https://github.com/k3s-io/k3s/releases/download/${version}/sha256sum-amd64.txt
 
         if [[ $(is_valid_url ${url}) ]]; then
             # install k3s
-            curl -sfL ${url} | INSTALL_K3S_VERSION=${version} sh -s - --docker
+            curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${version} sh -s - --docker
             sudo chown -R ${USER} /etc/rancher/k3s
 
             # check installation
