@@ -13,10 +13,11 @@ Usage:  kad registry [COMMAND] [OPTIONS]
 
 Commands:
   clean    Remove all images from local registry
+  down     Delete local registry
   init     Init local registry
   ls       List images from local registry
-  mirror   Mirror image to the local registry, use image flag
-  rm       Remove image from local registry, use image flag
+  mirror   Mirror image to the local registry
+  rm       Remove image from local registry
 
 Options:
       --debug   Enable debug mode
@@ -26,44 +27,86 @@ Run 'kad COMMAND --help' for more information about a given command.
 EOF
 }
 
-clean_local_registry() {
-    echo "clean"
-}
-
-init_local_registry() {
-    if ! sudo docker top registry > /dev/null 2>&1; then
-        echo "Starting registry ${DOCKER_REGISTRY}..."
-        sudo docker run -d -p 5000:5000 --restart=always --name registry registry:2
-    else
-        echo "Registry ${DOCKER_REGISTRY} already exists"
+required() {
+    local flag=${1}
+    local value=${2}
+    if [[ ! ${value} ]]; then
+        echo "Requires the use of the ${flag} flag."
+        exit 1
     fi
 }
 
+not_required() {
+    local flag=${1}
+    local value=${2}
+    if [[ ${value} ]]; then
+        echo "Not require the use of the ${flag} flag."
+        exit 1
+    fi
+}
+
+clean_local_registry() {
+    if ! docker images | grep ${DOCKER_REGISTRY} >/dev/null 2>&1; then
+        echo "Nothing to clean from ${DOCKER_REGISTRY} registry."
+        exit 1
+    fi
+
+    echo "Cleaning images from ${DOCKER_REGISTRY}..."
+    docker rmi --force $(docker images | grep ${DOCKER_REGISTRY} | awk '{ printf "%s\n", $3 }')
+    echo "Cleaning images completed successfully."
+}
+
+down_local_registry() {
+    if ! docker top registry > /dev/null 2>&1; then
+        echo "Registry ${DOCKER_REGISTRY} was not initialized."
+        exit 1
+    fi
+
+    echo "Deleting registry ${DOCKER_REGISTRY}..."
+    docker rm -f $(docker container ls | grep registry | awk '{ printf "%s\n", $1 }')
+    echo "Deleting registry completed successfully."
+}
+
+init_local_registry() {
+    if docker top registry > /dev/null 2>&1; then
+        echo "Registry ${DOCKER_REGISTRY} already exists."
+        exit 1
+    fi
+
+    echo "Starting registry ${DOCKER_REGISTRY}..."
+    docker run -d -p 5000:5000 --restart=always --name registry registry:2
+    echo "Starting registry completed successfully."
+}
+
 list_images_from_registry() {
+    if ! docker images | grep ${DOCKER_REGISTRY} >/dev/null 2>&1; then
+        echo "Nothing to list from ${DOCKER_REGISTRY} registry."
+        exit 1
+    fi
+
     docker image ls | grep ${DOCKER_REGISTRY} | awk 'BEGIN { printf "IMAGES\n"} { printf "%s:%s\n", $1, $2 }'
 }
 
 mirror_images_to_registry() {
-    local images=("$@")
+    local image=${1}
 
-    echo "Mirroring images to ${DOCKER_REGISTRY}..."
-    for image in "${images[@]}"; do
-        echo "Mirroring image ${image}"
-        docker pull ${image}
-        docker tag ${image} ${DOCKER_REGISTRY}/${image}
-        docker push ${DOCKER_REGISTRY}/${image}
-    done
-    echo "Image mirroring completed successfully"
+    echo "Mirroring image ${image} to ${DOCKER_REGISTRY} registry..."
+    docker pull ${image}
+    docker tag ${image} ${DOCKER_REGISTRY}/${image}
+    docker push ${DOCKER_REGISTRY}/${image}
+    echo "Image mirroring completed successfully."
 }
 
 remove_images_from_registry() {
-    local images=("$@")
+    local images=${1}
 
-    echo "Removing images from ${DOCKER_REGISTRY}..."
-    for image in "${images[@]}"; do
-        echo "Removing image ${image}"
-        docker image rm ${image}
-    done
+    if ! docker images | grep ${DOCKER_REGISTRY}/${image} >/dev/null 2>&1; then
+        echo "Not found Image ${image} in the ${DOCKER_REGISTRY} registry."
+        exit 1
+    fi
+
+    echo "Removing image ${image} from ${DOCKER_REGISTRY} registry..."
+    docker image rmi -f $(docker images | grep ${DOCKER_REGISTRY}/${image} | awk '{ printf "%s\n", $3 }')
     echo "Images removal completed successfully"
 }
 
@@ -99,7 +142,7 @@ registry_cmd() {
                 fi
                 ;;
             *)
-                echo "Invalid parameter: ${key}."
+                echo "Invalid command: ${key}."
                 exit 1
                 ;;
             -*)
@@ -117,17 +160,27 @@ registry_cmd() {
     # run command
     case ${command} in
         clean)
+            not_required "--image" ${image}
             clean_local_registry
+            ;;
+        down)
+            not_required "--image" ${image}
+            down_local_registry
+            ;;
         init)
+            not_required "--image" ${image}
             init_local_registry
             ;;
         ls)
+            not_required "--image" ${image}
             list_images_from_registry
             ;;
         mirror)
+            required "--image" ${image}
             mirror_images_to_registry ${image}
             ;;
         rm)
+            required "--image" ${image}
             remove_images_from_registry ${image}
             ;;
         --help | -h | *)

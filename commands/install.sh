@@ -187,7 +187,7 @@ install_cmd() {
                 shift
                 ;;
             *)
-                echo "Invalid parameter: ${key}."
+                echo "Invalid command: ${key}."
                 exit 1
                 ;;
             -*)
