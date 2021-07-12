@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+## author: KleiberXD
+
 set -e
 
 uninstall_help() {

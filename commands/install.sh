@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+## author: KleiberXD
+
 set -e
 
 export COMMANDS_DIR="$(cd "$(dirname "${BASH_SOURCE-$0}")" && pwd)"
