@@ -162,11 +162,11 @@ install_cmd() {
 
     # parse flags and put them in a hash table
     declare -A flags
-    while [[ $# -gt 0 ]]; do
+    while [[ ${#} -gt 0 ]]; do
         local key=${1}
         case ${key} in
             --version | -v )
-                if [[ ${2} && $2 != *--* ]]; then
+                if [[ ${2} && ${2} != *--* ]]; then
                     flags[--version]=${2}
                     shift 2
                 else
@@ -178,7 +178,11 @@ install_cmd() {
                 flags[--debug]="true"
                 shift
                 ;;
-            * )
+            *)
+                echo "Invalid parameter: ${key}."
+                exit 1
+                ;;
+            -*)
                 echo "Invalid flag: ${key}."
                 exit 1
                 ;;
