@@ -160,14 +160,19 @@ install_cmd() {
         shift
     fi
 
+    # flag variables
+    # we should use a hash table like declare -A flags  and ${flags["key"]}
+    # but MacOS does not support associative array introduces in bash version 4
+    local version=""
+    local debug=""
+
     # parse flags and put them in a hash table
-    declare -A flags
     while [[ ${#} -gt 0 ]]; do
         local key=${1}
         case ${key} in
             --version | -v )
                 if [[ ${2} && ${2} != *--* ]]; then
-                    flags[--version]=${2}
+                    version=${2}
                     shift 2
                 else
                     echo "Please provide a value for the --version flag."
@@ -175,7 +180,7 @@ install_cmd() {
                 fi
                 ;;
             --debug)
-                flags[--debug]="true"
+                debug="true"
                 shift
                 ;;
             *)
@@ -188,10 +193,6 @@ install_cmd() {
                 ;;
         esac
     done
-
-    # flag variables
-    local version=${flags[--version]}
-    local debug=${flags[--debug]}
 
     # set debug if desired
     if [[ ${debug} == "true" ]]; then

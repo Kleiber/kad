@@ -3,6 +3,7 @@ set -e
 
 registry_help() {
     cat <<EOF
+
 Manage local registry.
 
 Usage:  kad registry [COMMAND] [OPTIONS]
@@ -10,8 +11,8 @@ Usage:  kad registry [COMMAND] [OPTIONS]
 Commands:
   init     Init local registry
   ls       List images from local registry
-  mirror   Mirror image to the local registry
-  rm       Remove image from local registry
+  mirror   Mirror image to the local registry, use image flag
+  rm       Remove image from local registry, use image flag
 
 Options:
       --debug   Enable debug mode
@@ -66,18 +67,23 @@ registry_cmd() {
         shift
     fi
 
+    # flag variables
+    # we should use a hash table like "declare -A" flags and "${flags[key]}"
+    # but MacOS does not support associative array introduces in bash version 4
+    local debug=""
+    local image=""
+
     # parse flags and put them in a hash table
-    declare -A flags
     while [[ ${#} -gt 0 ]]; do
         local key=${1}
         case ${key} in
             --debug)
-                flags[--debug]="true"
+                debug="true"
                 shift
                 ;;
             --image | -i )
                 if [[ ${2} && ${2} != *--* ]]; then
-                    flags[--image]=${2}
+                    image=${2}
                     shift 2
                 else
                     echo "Please provide a value for the --image flag."
@@ -94,10 +100,6 @@ registry_cmd() {
                 ;;
         esac
     done
-
-    # flag variables
-    local debug=${flags[--debug]}
-    local image=${flags[--image]}
 
     # set debug if desired
     if [[ ${debug} == "true" ]]; then

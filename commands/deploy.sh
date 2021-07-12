@@ -9,13 +9,14 @@ Manage deployments.
 Usage:  kad deploy [OPTIONS]
 
 Commands:
-  get         Get chart values
-  install     Instal helm deployment by chart
+  get         Get chart values, use name flag
+  install     Instal helm deployment by chart, use chart flag
   uninstall   Uninstall helm deployment
 
 Options:
-      --debug       Enable debug mode
-  -r, --namespace   Deployment name
+      --debug   Enable debug mode
+  -n, --name    Deploy name
+  -c, --chart   Chart filepath
 
 Run 'kad COMMAND --help' for more information about a given command.
 EOF

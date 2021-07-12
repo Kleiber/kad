@@ -26,11 +26,10 @@ kad tool helps to install and manage Kubernetes clusters.
 Usage:  kad COMMAND [OPTIONS]
 
 Commands:
-  build       Build an image from a Dockerfile
   deploy      Deploy using helm values
+  docker      Manage Docker images
   install     Install tools
-  push        Push an image to the Docker registry
-  registry    Manage the Docker registry
+  registry    Manage Docker registry
   uninstall   Uninstall tools
 
 Options:
