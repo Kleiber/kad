@@ -161,7 +161,7 @@ install_cmd() {
     fi
 
     # flag variables
-    # we should use a hash table like declare -A flags  and ${flags["key"]}
+    # we should use a hash table like "declare -A" flags and "${flags[key]}"
     # but MacOS does not support associative array introduces in bash version 4
     local version=""
     local debug=""
