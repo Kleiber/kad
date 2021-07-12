@@ -9,6 +9,7 @@ Manage local registry.
 Usage:  kad registry [COMMAND] [OPTIONS]
 
 Commands:
+  clean    Remove all images from local registry
   init     Init local registry
   ls       List images from local registry
   mirror   Mirror image to the local registry, use image flag
@@ -20,6 +21,10 @@ Options:
 
 Run 'kad COMMAND --help' for more information about a given command.
 EOF
+}
+
+clean_local_registry() {
+    echo "clean"
 }
 
 init_local_registry() {
@@ -108,6 +113,8 @@ registry_cmd() {
 
     # run command
     case ${command} in
+        clean)
+            clean_local_registry
         init)
             init_local_registry
             ;;

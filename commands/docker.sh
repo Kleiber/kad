@@ -9,10 +9,11 @@ Manage docker images.
 Usage:  kad deploy [OPTIONS]
 
 Commands:
-  build   build image, use image flag
-  push    push image to the local registry, use image flag
-  run     run image container, use image flag
-  exec    execute command inside image container, use image and command flags
+  build   Build image, use image flag
+  clean   Remove all images and containers
+  exec    Execute command inside image container, use image and command flags
+  push    Push image to the local registry, use image flag
+  run     Run image container, use image flag
 
 Options:
   -c, --command   Command to execute

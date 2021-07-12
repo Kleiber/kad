@@ -10,8 +10,9 @@ Usage:  kad deploy [OPTIONS]
 
 Commands:
   get         Get chart values, use name flag
-  install     Instal helm deployment by chart, use chart flag
-  uninstall   Uninstall helm deployment
+  install     Instal helm deployment, use chart flag
+  uninstall   Uninstall helm deployment, use name flag
+  upgrade     Upgrade helm deployment, use chart flag
 
 Options:
       --debug   Enable debug mode
