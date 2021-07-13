@@ -51,9 +51,36 @@ clean_local_registry() {
         exit 1
     fi
 
-    echo "Cleaning images from ${DOCKER_REGISTRY}..."
-    docker rmi --force $(docker images | grep ${DOCKER_REGISTRY} | awk '{ printf "%s\n", $3 }')
-    echo "Cleaning images completed successfully."
+    echo "Cleaning ${DOCKER_REGISTRY} registry..."
+
+    local images_ids=$(docker images | grep ${DOCKER_REGISTRY} | awk '{ printf "%s\n", $3 }')
+
+    echo "Removing containers using a registry image..."
+    for image_id in ${images_ids}; do
+        if ! docker ps --filter ancestor=${image_id} >/dev/null 2>&1; then
+            docker rm -f $(docker ps --quiet --filter ancestor=${image_id})
+        fi
+    done
+    echo "Removing containers completed successfully."
+
+    echo "Removing dependent child images using a registry image..."
+    for image_id in ${images_ids}; do
+        if ! docker images --filter since=${image_id} >/dev/null 2>&1; then
+            docker inspect --format='{{.Id}} {{.Parent}}' $(docker images --quiet --filter since=${image_id}) | \
+                cut -d' ' -f1 | \
+                cut -d: -f2 | \
+                xargs docker rmi
+        fi
+    done
+    echo "Removing dependent child images completed successfully."
+
+    echo "Removing images from registry..."
+    for image_id in ${images_ids}; do
+        docker rmi --force ${image_id}
+    done
+    echo "Removing images completed successfully."
+
+    echo "Cleaning registry completed successfully."
 }
 
 down_local_registry() {
@@ -84,7 +111,7 @@ list_images_from_registry() {
         exit 1
     fi
 
-    docker image ls | grep ${DOCKER_REGISTRY} | awk 'BEGIN { printf "IMAGES\n"} { printf "%s:%s\n", $1, $2 }'
+    docker image ls | grep ${DOCKER_REGISTRY} | awk 'BEGIN { printf "REGISTRY/IMAGE TAG\n"} {print $1, $2}' | column -t
 }
 
 mirror_images_to_registry() {
@@ -98,15 +125,32 @@ mirror_images_to_registry() {
 }
 
 remove_images_from_registry() {
-    local images=${1}
+    local image=${1}
 
     if ! docker images | grep ${DOCKER_REGISTRY}/${image} >/dev/null 2>&1; then
         echo "Not found Image ${image} in the ${DOCKER_REGISTRY} registry."
         exit 1
     fi
 
+    local image_id=$(docker images | grep ${DOCKER_REGISTRY}/${image} | awk '{ printf "%s\n", $3 }')
+
+    echo "Removing containers using ${image} image..."
+    if ! docker ps --filter ancestor=${image_id} >/dev/null 2>&1; then
+        docker rm -f $(docker ps --quiet --filter ancestor=${image_id}})
+    fi
+    echo "Removing containers completed successfully."
+
+    echo "Removing dependent child images using ${image} image..."
+    if ! docker images --filter since=${image_id} >/dev/null 2>&1; then
+        docker inspect --format='{{.Id}} {{.Parent}}' $(docker images --quiet --filter since=${image_id}) | \
+            cut -d' ' -f1 | \
+            cut -d: -f2 | \
+            xargs docker rmi
+    fi
+    echo "Removing dependent child images completed successfully."
+
     echo "Removing image ${image} from ${DOCKER_REGISTRY} registry..."
-    docker image rmi -f $(docker images | grep ${DOCKER_REGISTRY}/${image} | awk '{ printf "%s\n", $3 }')
+    docker image rmi -f ${image_id}
     echo "Images removal completed successfully"
 }
 
