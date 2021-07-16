@@ -65,7 +65,41 @@ uninstall_k3s() {
 }
 
 uninstall_cmd() {
-    local os_type=$(get_os_type)
+    local command=${1}
+
+    # shift only if the command was not empty
+    if [[ ${command} ]]; then
+        shift
+    fi
+
+    # flag variables
+    # we should use a hash table like "declare -A" flags and "${flags[key]}"
+    # but MacOS does not support associative array introduces in bash version 4
+    local debug=""
+
+    # parse flags and put them in a hash table
+    while [[ ${#} -gt 0 ]]; do
+        local key=${1}
+        case ${key} in
+            --debug)
+                debug="true"
+                shift
+                ;;
+            *)
+                echo "Invalid command: ${key}."
+                exit 1
+                ;;
+            -*)
+                echo "Invalid flag: ${key}."
+                exit 1
+                ;;
+        esac
+    done
+
+    # set debug if desired
+    if [[ ${debug} == "true" ]]; then
+        set -x
+    fi
 
     case ${1} in
         golang)
