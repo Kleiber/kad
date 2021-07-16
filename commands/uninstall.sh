@@ -24,11 +24,24 @@ Run 'kad COMMAND --help' for more information about a given command.
 EOF
 }
 
+uninstall_k3s() {
+    if [ -f /usr/local/bin/k3s-uninstall.sh ]; then
+        echo "Uninstalling k3s..."
+        /usr/local/bin/k3s-uninstall.sh || true
+        echo "Successfully uninstalled k3s."
+    else
+        echo "Nothing to uninstall."
+    fi
+}
+
 uninstall_cmd() {
     local os_type=$(get_os_type)
 
     case ${1} in
-        --help|-h|*)
+        k3s)
+            uninstall_k3s
+            ;;
+        --help | -h | *)
             uninstall_help
             ;;
     esac
