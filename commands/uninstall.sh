@@ -101,7 +101,7 @@ uninstall_cmd() {
         set -x
     fi
 
-    case ${1} in
+    case ${command} in
         golang)
             uninstall_golang
             ;;
@@ -119,3 +119,4 @@ uninstall_cmd() {
             ;;
     esac
 }
+
