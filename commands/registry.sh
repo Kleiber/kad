@@ -232,3 +232,4 @@ registry_cmd() {
             ;;
     esac
 }
+

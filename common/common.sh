@@ -10,3 +10,4 @@ is_valid_url() {
         return 0
     fi
 }
+

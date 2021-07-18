@@ -11,3 +11,4 @@ get_os_type() {
         echo ""
     fi
 }
+
