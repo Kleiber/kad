@@ -13,7 +13,7 @@ Usage:  kad deploy [OPTIONS]
 
 Commands:
   get         Get chart values, use name flag
-  install     Instal helm deployment, use chart flag
+  install     Install helm deployment, use chart flag
   uninstall   Uninstall helm deployment, use name flag
   upgrade     Upgrade helm deployment, use chart flag
 

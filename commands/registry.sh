@@ -27,24 +27,6 @@ Run 'kad COMMAND --help' for more information about a given command.
 EOF
 }
 
-required() {
-    local flag=${1}
-    local value=${2}
-    if [[ ! ${value} ]]; then
-        echo "Requires the use of the ${flag} flag."
-        exit 1
-    fi
-}
-
-not_required() {
-    local flag=${1}
-    local value=${2}
-    if [[ ${value} ]]; then
-        echo "Not require the use of the ${flag} flag."
-        exit 1
-    fi
-}
-
 clean_local_registry() {
     if ! docker images | grep ${DOCKER_REGISTRY} >/dev/null 2>&1; then
         echo "Nothing to clean from ${DOCKER_REGISTRY} registry."
@@ -177,7 +159,7 @@ registry_cmd() {
                 shift
                 ;;
             --image | -i )
-                if [[ ${2} && ${2} != *--* ]]; then
+                if [[ ${2} && ${2} != *-* ]]; then
                     image=${2}
                     shift 2
                 else
