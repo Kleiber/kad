@@ -15,7 +15,7 @@ Commands:
   build   Build image, use dockerfile flag
   clean   Remove all images and containers
   exec    Execute command inside container, use container and cmd flags in this order
-  push    Push image to the local registry, use image and registry flags
+  push    Push image to the local registry, use image flag
   run     Run image container, use image and container flag
 
 Options:
@@ -24,7 +24,6 @@ Options:
       --debug        Enable debug mode
   -d, --dockerfile   Dockerfile directory path
   -i, --image        Image name optional include the tag
-  -r, --registry     Docker Registry
 
 Run 'kad COMMAND --help' for more information about a given command.
 EOF
@@ -79,11 +78,10 @@ exec_docker() {
 
 push_docker() {
     local image=${1}
-    local registry=${2}
 
-    echo "Pushing ${image} image to ${registry} registry..."
-    docker tag ${image} ${registry}/${image}
-    docker push ${registry}/${image}
+    echo "Pushing ${image} image to ${DOCKER_REGISTRY} registry..."
+    docker tag ${image} ${DOCKER_REGISTRY}/${image}
+    docker push ${DOCKER_REGISTRY}/${image}
     echo "Push image completed successfully."
 }
 
@@ -112,7 +110,6 @@ docker_cmd() {
     local debug=""
     local dockerfile=""
     local image=""
-    local registry=""
 
     # parse flags and put them in a hash table
     while [[ ${#} -gt 0 ]]; do
@@ -155,15 +152,6 @@ docker_cmd() {
                     exit 1
                 fi
                 ;;
-            --registry | -r )
-                if [[ ${2} && ${2} != *-* ]]; then
-                    registry=${2}
-                    shift 2
-                else
-                    echo "Please provide a value for the --registry flag."
-                    exit 1
-                fi
-                ;;
             --debug)
                 debug="true"
                 shift
@@ -188,7 +176,6 @@ docker_cmd() {
         build)
             not_required "--cmd" ${cmd}
             not_required "--container" ${container}
-            not_required "--registry" ${registry}
             required "--dockerfile" ${dockerfile}
             required "--image" ${image}
             build_docker ${dockerfile} ${image}
@@ -198,13 +185,11 @@ docker_cmd() {
             not_required "--container" ${container}
             not_required "--dockerfile" ${dockerfile}
             not_required "--image" ${image}
-            not_required "--registry" ${registry}
             clean_docker
             ;;
         exec)
             not_required "--dockerfile" ${dockerfile}
             not_required "--image" ${image}
-            not_required "--registry" ${registry}
             required "--container" ${container}
             required "--cmd" ${cmd}
             exec_docker ${container} "${cmd}"
@@ -214,13 +199,11 @@ docker_cmd() {
             not_required "--container" ${container}
             not_required "--dockerfile" ${dockefile}
             required "--image" ${image}
-            required "--registry" ${registry}
-            push_docker ${image} ${registry}
+            push_docker ${image}
             ;;
         run)
             not_required "--cmd" ${cmd}
             not_required "--dockerfile" ${dockerfile}
-            not_required "--registry" ${registry}
             required "--image" ${image}
             required "--container" ${container}
             run_docker ${image} ${container}
