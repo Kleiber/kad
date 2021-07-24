@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: container-kad
-      image: {{ .Values.images.registry }}/{{ .Values.Name }}:{{.Values.Version}}
+      image: {{ .Values.image.registry }}/{{ .Values.image.name }}:{{.Values.image.tag}}
       envFrom:
       - configMapRef:
           name: configmap-kad

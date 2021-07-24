@@ -3,6 +3,10 @@ name: kad
 # version is the app version
 version: latest
 
-images:
+image:
   # registry is the Docker registry for image.
   registry: localhost:5000
+  # name is the image name.
+  name: kad
+  # tag is the image tag.
+  tag: latest

@@ -23,7 +23,7 @@ Options:
   -c, --container    Container name
       --debug        Enable debug mode
   -d, --dockerfile   Dockerfile directory path
-  -i, --image        Image name
+  -i, --image        Image name optional include the tag
   -r, --registry     Docker Registry
 
 Run 'kad COMMAND --help' for more information about a given command.
@@ -32,10 +32,11 @@ EOF
 
 build_docker() {
     local dockerfile=${1}
+    local image=${2}
 
     if [ -d ${dockerfile} ]; then
         echo "Building dockerfile at ${dockerfile}..."
-        docker build ${dockerfile}
+        docker build ${dockerfile} -t ${image}
         echo "Build dockerfile completed successfully."
     else
         echo "Not found ${dockerfile} dockerfile."
@@ -187,10 +188,10 @@ docker_cmd() {
         build)
             not_required "--cmd" ${cmd}
             not_required "--container" ${container}
-            not_required "--image" ${image}
             not_required "--registry" ${registry}
             required "--dockerfile" ${dockerfile}
-            build_docker ${dockerfile}
+            required "--image" ${image}
+            build_docker ${dockerfile} ${image}
             ;;
         clean)
             not_required "--cmd" ${cmd}

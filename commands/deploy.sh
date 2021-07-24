@@ -101,7 +101,8 @@ deploy_cmd() {
         local key=${1}
         case ${key} in
             --chart | -c)
-                if [[ ${2} && ${2} != *-* ]]; then
+                set -x
+                if [[ ${2} && ${2} != -* ]]; then
                     chart=${2}
                     shift 2
                 else
@@ -110,7 +111,7 @@ deploy_cmd() {
                 fi
                 ;;
             --name | -n )
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     name=${2}
                     shift 2
                 else
