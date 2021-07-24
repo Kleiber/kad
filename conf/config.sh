@@ -5,9 +5,9 @@
 export CLI_NAME=kad
 
 export K3S_VERSION=v1.21.2+k3s1
-export KUBERNETES_VERSION=v1.21.2
+export KUBECTL_VERSION=v1.21.2
 export HELM_VERSION=v3.6.2
-export GO_VERSION=1.16.5
+export GOLANG_VERSION=1.16.5
 
 export NAMESPACE=${NAMESPACE:-"default"}
 export KUBECONFIG=${KUBECONFIG:-"/etc/rancher/k3s/k3s.yaml"}
