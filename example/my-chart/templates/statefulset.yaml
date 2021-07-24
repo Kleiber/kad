@@ -2,15 +2,20 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: statefulset-kad
-  labels:
-    app: KadApp
 spec:
-  containers:
-    - name: container-kad
-      image: {{ .Values.image.registry }}/{{ .Values.image.name }}:{{.Values.image.tag}}
-      envFrom:
-      - configMapRef:
-          name: configmap-kad
-      ports:
-      - name: kad-port
-        containerPort: 8080
+  serviceName: "kad"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: KadApp
+    spec:
+      containers:
+        - name: container-kad
+          image: {{ .Values.image.registry }}/{{ .Values.image.name }}:{{.Values.image.tag}}
+          envFrom:
+          - configMapRef:
+              name: configmap-kad
+          ports:
+          - name: kad-port
+            containerPort: 8080
