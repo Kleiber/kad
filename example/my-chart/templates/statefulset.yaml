@@ -1,5 +1,5 @@
+apiVersion: apps/v1
 kind: StatefulSet
-apiVersion: v1
 metadata:
   name: statefulset-kad
   labels:
