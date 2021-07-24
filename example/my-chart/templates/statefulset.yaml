@@ -1,7 +1,7 @@
-kind: Pod
+kind: StatefulSet
 apiVersion: v1
 metadata:
-  name: pod-kad
+  name: statefulset-kad
   labels:
     app: KadApp
 spec:
