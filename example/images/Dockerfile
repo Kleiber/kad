@@ -4,7 +4,7 @@ COPY ../app $GOPATH/src/app
 
 WORKDIR $GOPATH/src/app
 
-RUN go mod
+RUN go mod verdor
 
 RUN go install main.go
 

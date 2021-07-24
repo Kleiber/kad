@@ -1,0 +1,16 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-kad
+  labels:
+    app: KadApp
+spec:
+  containers:
+    - name: container-kad
+      image: {{ .Values.images.registry }}/{{ .Values.Name }}:{{.Values.Version}}
+      envFrom:
+      - configMapRef:
+          name: configmap-kad
+      ports:
+      - name: kad-port
+        containerPort: 8080

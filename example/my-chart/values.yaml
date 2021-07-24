@@ -1,7 +1,7 @@
 # name is the app name
-name: Kad
+name: kad
 # version is the app version
-version: 1.0.0
+version: latest
 
 images:
   # registry is the Docker registry for image.

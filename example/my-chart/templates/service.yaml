@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-kad
+spec:
+  selector:
+    app: KadApp
+  ports:
+    - name: kad-port
+      port: 8080
