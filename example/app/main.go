@@ -20,7 +20,7 @@ var (
 )
 
 func GetInfo(w http.ResponseWriter, r *http.Request) {
-	info := fmt.Sprintf("Hello %q application version %q \n", appName, appVersion)
+	info := fmt.Sprintf("Hello %q application version %q!!!!\n", appName, appVersion)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, info)
 }
@@ -30,7 +30,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/hello", GetInfo).Methods("GET")
 
-	fmt.Printf("Starting server %q on port %q..\n", host, port)
+	fmt.Printf("Starting server %q on port %q...\n", host, port)
 
 	hostname := fmt.Sprintf("%s:%s", host, port)
 	err := http.ListenAndServe(hostname, router)
