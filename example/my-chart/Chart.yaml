@@ -1,0 +1,4 @@
+apiVersion: v1
+name: my-chart
+version: v1
+description: kad example app

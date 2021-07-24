@@ -74,10 +74,4 @@ Options:
 Run 'kad COMMAND --help' for more information about a given command.
 ```
 
-### ***deploy***
-### ***docker***
-### ***install***
-### ***registry***
-### ***uninstall***
-
 ## Example

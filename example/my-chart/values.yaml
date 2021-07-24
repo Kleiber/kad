@@ -1,0 +1,8 @@
+# name is the app name
+name: Kad
+# version is the app version
+version: 1.0.0
+
+images:
+  # registry is the Docker registry for image.
+  registry: localhost:5000
