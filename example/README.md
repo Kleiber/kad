@@ -1,4 +1,4 @@
-# My chart
+# Example
 
 ### Images
 
