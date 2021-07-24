@@ -1,6 +1,18 @@
 # Example
 
 ```bash
+$ cat ~/.bashrc
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+export NAMESPACE=kleiber
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+export DOCKER_REGISTRY=localhost:5000
+export DOCKER_TAG=kleiber
+```
+
+```bash
 $ kad install helm
 Installing helm version v3.6.2 for linux OS...
 Helm version v3.6.2 was installed successfully.
@@ -158,7 +170,7 @@ my-chart
 ```
 
 ```bash
-$ kad deploy install -n kad -c my-chart
+$ kad deploy install --name kad --chart my-chart
 Deploying kad from my-chart chart...
 NAME: kad
 LAST DEPLOYED: Sat Jul 24 22:04:49 2021
@@ -173,7 +185,7 @@ Deploy kad completed successfully.
 $ kad deploy ls
 NAME       	NAMESPACE  	REVISION	UPDATED                                 	STATUS  	CHART             	APP VERSION
 kad        	kleiber    	1       	2021-07-24 22:04:49.879751074 +0200 CEST	deployed	my-chart-v1       	           
-traefik    	kube-system	1       	2021-07-24 19:43:22.376582588 +0000 UTC 	deployed	traefik-9.18.2    	2.4.8      
+traefik    	kube-system	1       	2021-07-24 19:43:22.376582588 +0000 UTC 	deployed	traefik-9.18.2    	2.4.8
 traefik-crd	kube-system	1       	2021-07-24 19:43:20.943949275 +0000 UTC 	deployed	traefik-crd-9.18.2	
 ```
 
@@ -183,29 +195,37 @@ traefik-crd	kube-system	1       	2021-07-24 19:43:20.943949275 +0000 UTC 	deploy
 $ kubectl get pods
 NAME                READY   STATUS    RESTARTS   AGE
 statefulset-kad-0   1/1     Running   0          5s
+statefulset-kad-1   1/1     Running   0          4s
+statefulset-kad-2   1/1     Running   0          3s
 ```
 
 ```bash
-$ kubectl get statefulset
+i865255@PHLL41000201D:~/kad/example (master)$ kubectl get statefulset
 NAME              READY   AGE
-statefulset-kad   1/1     33s
+statefulset-kad   3/3     17s
 ```
 
 ```bash
-$ kubectl get configmap
+i865255@PHLL41000201D:~/kad/example (master)$ kubectl get configmap
 NAME               DATA   AGE
-kube-root-ca.crt   1      42s
-configmap-kad      2      42s
+configmap-kad      2      23s
+kube-root-ca.crt   1      23s
 ```
 
 ```bash
-$ kubectl get service
+i865255@PHLL41000201D:~/kad/example (master)$ kubectl get service
 NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service-kad   ClusterIP   10.43.189.143   <none>        8080/TCP   47s
+service-kad   ClusterIP   10.43.144.212   <none>        8080/TCP   30s
 ```
 
 ```bash
 $ kubectl logs statefulset-kad-0
+Initializing the router...
+Starting server "localhost" on port "8080"...
+$ kubectl logs statefulset-kad-1
+Initializing the router...
+Starting server "localhost" on port "8080"...
+$ kubectl logs statefulset-kad-2
 Initializing the router...
 Starting server "localhost" on port "8080"...
 ```
@@ -219,4 +239,23 @@ Forwarding from [::1]:8080 -> 8080
 ```bash
 $ curl http://127.0.0.1:8080/hello
 Hello "kad" application version "latest"!!!!
+```
+
+```bash
+$ kad deploy uninstall --name kad
+Undeploying kad deploy...
+release "kad" uninstalled
+No resources found
+No resources found
+secret "default-token-x8djx" deleted
+configmap "kube-root-ca.crt" deleted
+namespace "kleiber" deleted
+Undeploy kad completed successfully.
+```
+
+```bash
+$ kad deploy ls
+NAME       	NAMESPACE  	REVISION	UPDATED                                	STATUS  	CHART             	APP VERSION
+traefik    	kube-system	1       	2021-07-24 19:43:22.376582588 +0000 UTC	deployed	traefik-9.18.2    	2.4.8
+traefik-crd	kube-system	1       	2021-07-24 19:43:20.943949275 +0000 UTC	deployed	traefik-crd-9.18.2
 ```
