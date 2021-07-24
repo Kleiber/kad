@@ -73,7 +73,7 @@ Starting registry completed successfully.
 $ cd example
 ```
 
-### Images
+## Images
 
 ```bash
 $ kad docker build --dockerfile app --image kad
@@ -156,7 +156,7 @@ REGISTRY/IMAGE      TAG
 localhost:5000/kad  latest
 ```
 
-### Chart
+## Chart
 
 ```
 my-chart
@@ -164,8 +164,10 @@ my-chart
 |-- charts
 |-- crds
 |-- templates
-|   |-- kad-configmap.yaml
-|   `-- kad-pod.yaml
+|   |-- configmap.yaml
+|   |-- ingress.yaml
+|   |-- service.yaml
+|   `-- statefulset.yaml
 `-- values.yaml
 ```
 
@@ -189,7 +191,7 @@ traefik    	kube-system	1       	2021-07-24 19:43:22.376582588 +0000 UTC 	deploy
 traefik-crd	kube-system	1       	2021-07-24 19:43:20.943949275 +0000 UTC 	deployed	traefik-crd-9.18.2	
 ```
 
-### App
+## App
 
 ```bash
 $ kubectl get pods
