@@ -174,7 +174,7 @@ install_cmd() {
         local key=${1}
         case ${key} in
             --version | -v )
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     version=${2}
                     shift 2
                 else

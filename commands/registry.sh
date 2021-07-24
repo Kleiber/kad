@@ -159,7 +159,7 @@ registry_cmd() {
                 shift
                 ;;
             --image | -i )
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     image=${2}
                     shift 2
                 else

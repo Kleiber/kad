@@ -116,7 +116,7 @@ docker_cmd() {
         local key=${1}
         case ${key} in
             --cmd)
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     shift 1
                     cmd="${@}"
                     shift $#
@@ -126,7 +126,7 @@ docker_cmd() {
                 fi
                 ;;
             --container | -c )
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     container=${2}
                     shift 2
                 else
@@ -135,7 +135,7 @@ docker_cmd() {
                 fi
                 ;;
             --image | -i )
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     image=${2}
                     shift 2
                 else
@@ -144,7 +144,7 @@ docker_cmd() {
                 fi
                 ;;
             --dockerfile | -d )
-                if [[ ${2} && ${2} != *-* ]]; then
+                if [[ ${2} && ${2} != -* ]]; then
                     dockerfile=${2}
                     shift 2
                 else
