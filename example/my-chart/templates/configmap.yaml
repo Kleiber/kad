@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
     name: configmap-kad
 data:
-    APP_NAME: {{ .Values.name | quote }}
-    APP_VERSION: {{ .Values.version | quote }}
+    APP_NAME: {{ .Values.app.name | quote }}
+    APP_VERSION: {{ .Values.app.version | quote }}

@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: KadApp # has to match .spec.template.metadata.labels
   serviceName: "kad"
-  replicas: 1
+  replicas: {{ .Values.app.replicas }}
   template:
     metadata:
       labels:
