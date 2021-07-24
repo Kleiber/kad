@@ -1,44 +1,58 @@
 # kad
-kad tool helps to install and manage Kubernetes clusters
 
 ## Overview
 
-```bash
-cd $HOME
-git clone https://github.com/Kleiber/kad.git
-```
+`kad` tool helps to install Kubernetes clusters and manage Docker containers.
+
+## Requirements
+
+Docker installed is a requirement:
+
+- [Docker Engine](https://docs.docker.com/engine/install/ubuntu/) for Linux OS
+- [Docker Desktop](https://docs.docker.com/docker-for-mac/install/) for Mac OS
 
 ## Installing
 
+Using `kad` command line is simple. First, clone the repository in your workspace
+
+```bash
+$ cd $HOME
+$ git clone https://github.com/Kleiber/kad.git
+```
+
 ### Linux
+
+Include the following line in your `.bashrc` file (use the command `vim ~/.bashrc` to edit)
 
 ```bash
 export PATH=$PATH:$HOME/kad:
+
+export NAMESPACE=<your-namespace>
+export DOCKER_TAG=<your-docker-tag>
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 ```
 
-```bash
-export NAMESPACE=<namespace>
-export DOCKER_TAG=<docker-tag>
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-export DOCKER_REGISTRY=localhost:5000
-```
+Finally, restart your terminal or run the command `source ~/.bashrc`
 
 ### Mac
 
-```bash
-export PATH=$PATH:$HOME/kad:
-```
+Include the following lines in your `.zshrc` file (use the command `vim ~/.zshrc` to edit)
 
 ```bash
-export NAMESPACE=<namespace>
-export DOCKER_TAG=<docker-tag>
+export PATH=$PATH:$HOME/kad:
+
+export NAMESPACE=<your-namespace>
+export DOCKER_TAG=<your-docker-tag>
 export KUBECONFIG=~/.kube/config
-export DOCKER_REGISTRY=localhost:5000
 ```
+
+Finally, restart your terminal
 
 ## Commands
 
 ```bash
+$ kad --help
+
 kad tool helps to install and manage Kubernetes clusters.
 
  Find more information at: https://github.com/Kleiber/kad
