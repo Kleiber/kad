@@ -2,15 +2,16 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-kad
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: "kad.com"
-    http:
+  - http:
       paths:
       - pathType: Prefix
-        path: / # all paths
+        path: /hello
         backend:
           service:
-            name: service-kad # service name
+            name: service-kad
             port:
-              number: 8080  # service port
+              number: 8080
