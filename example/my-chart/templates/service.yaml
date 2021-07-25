@@ -8,3 +8,4 @@ spec:
   ports:
     - name: kad-port
       port: 8080
+      nodePort: 30007

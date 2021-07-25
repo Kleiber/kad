@@ -12,4 +12,4 @@ app:
   # version is the app version
   version: latest
   # replicas is the number of app replicas.
-  replicas: 3
+  replicas: 2

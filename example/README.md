@@ -198,24 +198,23 @@ $ kubectl get pods
 NAME                READY   STATUS    RESTARTS   AGE
 statefulset-kad-0   1/1     Running   0          5s
 statefulset-kad-1   1/1     Running   0          4s
-statefulset-kad-2   1/1     Running   0          3s
 ```
 
 ```bash
-i865255@PHLL41000201D:~/kad/example (master)$ kubectl get statefulset
+$ kubectl get statefulset
 NAME              READY   AGE
-statefulset-kad   3/3     17s
+statefulset-kad   2/2     17s
 ```
 
 ```bash
-i865255@PHLL41000201D:~/kad/example (master)$ kubectl get configmap
+$ kubectl get configmap
 NAME               DATA   AGE
 configmap-kad      2      23s
 kube-root-ca.crt   1      23s
 ```
 
 ```bash
-i865255@PHLL41000201D:~/kad/example (master)$ kubectl get service
+$ kubectl get service
 NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 service-kad   ClusterIP   10.43.144.212   <none>        8080/TCP   30s
 ```

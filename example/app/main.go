@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -20,6 +21,9 @@ var (
 )
 
 func GetInfo(w http.ResponseWriter, r *http.Request) {
+	dateTime := time.Now()
+	fmt.Printf("%s received a request.\n", dateTime.String())
+
 	info := fmt.Sprintf("Hello %q application version %q!!!!\n", appName, appVersion)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, info)
