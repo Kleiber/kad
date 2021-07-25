@@ -214,21 +214,9 @@ kube-root-ca.crt   1      23s
 ```
 
 ```bash
-$ kubectl get service
-NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service-kad   ClusterIP   10.43.144.212   <none>        8080/TCP   30s
-```
-
-```bash
-$ kubectl logs statefulset-kad-0
-Initializing the router...
-Starting server "localhost" on port "8080"...
-$ kubectl logs statefulset-kad-1
-Initializing the router...
-Starting server "localhost" on port "8080"...
-$ kubectl logs statefulset-kad-2
-Initializing the router...
-Starting server "localhost" on port "8080"...
+$ kubectl get svc
+NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service-kad   NodePort   10.43.231.170   <none>        8080:30007/TCP   30s
 ```
 
 ```bash
@@ -240,6 +228,16 @@ Forwarding from [::1]:8080 -> 8080
 ```bash
 $ curl http://127.0.0.1:8080/hello
 Hello "kad" application version "latest"!!!!
+```
+
+```bash
+$ $ kubectl logs statefulset-kad-0
+Initializing the router...
+Starting server "localhost" on port "8080"...
+2021-07-25 01:30:30.08466222 +0000 UTC m=+252.123298531 received a request.
+$ kubectl logs statefulset-kad-1
+Initializing the router...
+Starting server "localhost" on port "8080"...
 ```
 
 ```bash

@@ -50,6 +50,8 @@ Finally, restart your terminal
 
 ## Commands
 
+Later, we can run the `kad --help` command to see how to use the different commands:
+
 ```bash
 $ kad --help
 
@@ -75,3 +77,5 @@ Run 'kad COMMAND --help' for more information about a given command.
 ```
 
 ## Example
+
+To see how the different commands can be used, see the example. In [this example](./example), we show how to deploy in a kubernetes cluster an application developed in golang.
