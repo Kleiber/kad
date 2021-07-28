@@ -193,6 +193,13 @@ traefik-crd	kube-system	1       	2021-07-24 19:43:20.943949275 +0000 UTC 	deploy
 
 ## App
 
+```
+my-app
+|-- Dockerfile
+|-- go.mod
+`-- main.go
+```
+
 ```bash
 $ kubectl get pods
 NAME                READY   STATUS    RESTARTS   AGE
@@ -231,10 +238,13 @@ Hello "kad" application version "latest"!!!!
 ```
 
 ```bash
-$ $ kubectl logs statefulset-kad-0
+$ kubectl logs statefulset-kad-0
 Initializing the router...
 Starting server "localhost" on port "8080"...
 2021-07-25 01:30:30.08466222 +0000 UTC m=+252.123298531 received a request.
+```
+
+```bash
 $ kubectl logs statefulset-kad-1
 Initializing the router...
 Starting server "localhost" on port "8080"...
