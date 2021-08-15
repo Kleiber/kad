@@ -212,6 +212,8 @@ traefik-crd	kube-system	1       	2021-07-24 19:43:20.943949275 +0000 UTC 	deploy
 
 ## App
 
+The application we are deploying has a server listening to an endpoint `/hello`.
+
 ```
 my-app
 |-- Dockerfile
@@ -219,7 +221,7 @@ my-app
 `-- main.go
 ```
 
-
+Once deployed we can see all the resources created for our application work. Maybe something interesting here is that in our chart we define the number of instances/replicas that we want from our application.
 
 ```bash
 $ kubectl get pods
@@ -241,11 +243,15 @@ NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 service-kad   NodePort   10.43.231.170   <none>        8080:30007/TCP   30s
 ```
 
+We create a service to be able to connect with the server that we start in our application. Then we expose this service locally to connect.
+
 ```bash
 $ kubectl port-forward svc/service-kad 8080
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
 ```
+
+Finally we can make requests to our server.
 
 ```bash
 $ curl http://127.0.0.1:8080/hello
@@ -261,6 +267,8 @@ Initializing the router...
 Starting server "localhost" on port "8080"...
 ```
 
+We can see that only one replica is being used to respond to the requests. In case we would like to scale our application, several replicas help and for this we would also additionally need a load balancing or an ingress to manage the requests. On the other hand, if we want to delete our deploy, simply execute the following command:
+
 ```bash
 $ kad deploy uninstall --name kad
 Undeploying kad deploy...
@@ -272,6 +280,8 @@ configmap "kube-root-ca.crt" deleted
 namespace "kleiber" deleted
 Undeploy kad completed successfully.
 ```
+
+If we list the deployments we will see that the one of our application is no longer found.
 
 ```bash
 $ kad deploy ls
