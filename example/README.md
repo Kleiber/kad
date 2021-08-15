@@ -1,36 +1,30 @@
 # Example
 
+Here we describe an example of how to use the tool `kad` to deploy an application to a kubernetes cluster using k3s. To start we include the following environment variables in our `~/.bashrc` file.
+
 ```bash
 $ cat ~/.bashrc
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
 export NAMESPACE=kleiber
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 export DOCKER_REGISTRY=localhost:5000
 export DOCKER_TAG=kleiber
 ```
 
+Next, we install the tools we need to deploy our application in a cluster of kubernetes.
+
 ```bash
 $ kad install helm
 Installing helm version v3.6.2 for linux OS...
 Helm version v3.6.2 was installed successfully.
-```
 
-```bash
 $ kad install kubectl
 Installing kubectl version v1.21.2 for linux OS...
 Kubectl version v1.21.2 was installed successfully.
-```
 
-```bash
 $ kad install golang
 Installing golang version 1.16.5 for linux OS...
 Golang version 1.16.5 was installed successfully.
-```
 
-```bash
 $ kad install k3s
 Installing k3s version v1.21.2+k3s1 for linux OS...
 [INFO]  Using v1.21.2+k3s1 as release
@@ -53,6 +47,8 @@ Context "default" modified.
 K3s version v1.21.2+k3s1 was installed successfully.
 ```
 
+We also need to start a local docker registry where our images will be found.
+
 ```bash
 $ kad registry init
 Starting registry localhost:5000...
@@ -69,11 +65,24 @@ Status: Downloaded newer image for registry:2
 Starting registry completed successfully.
 ```
 
+Once the initial setup is done, we can start to deploy our application found in the `example` directory.
+
 ```bash
 $ cd example
 ```
 
 ## Images
+
+In the directory of our applications, we have a Docker image that basically prepares the environment to start our application.
+
+```
+my-app
+|-- Dockerfile
+|-- go.mod
+`-- main.go
+```
+
+So first we build the docker image:
 
 ```bash
 $ kad docker build --dockerfile app --image kad
@@ -129,6 +138,8 @@ Successfully tagged kad:latest
 Build dockerfile completed successfully.
 ```
 
+Then we push this image in our local docker registry:
+
 ```bash
 $ kad docker push --image kad
 Pushing kad image to localhost:5000 registry...
@@ -150,6 +161,8 @@ latest: digest: sha256:443f1a806c220fc9314acbe5f32e25ba4aecf1bf2c1efceb0fb656679
 Push image completed successfully.
 ```
 
+Finally we confirm if this image is in our local docker registry and is ready to be consumed:
+
 ```bash
 $ kad registry ls
 REGISTRY/IMAGE      TAG
@@ -157,6 +170,8 @@ localhost:5000/kad  latest
 ```
 
 ## Chart
+
+Helm uses a packaging format called charts. A chart is a collection of files that describe a related set of Kubernetes resources. A single chart might be used to deploy something simple, like a memcached pod, or something complex, like a full web app stack with HTTP servers, databases, caches, and so on. The structure of our chart is as follows:
 
 ```
 my-chart
@@ -171,6 +186,8 @@ my-chart
 `-- values.yaml
 ```
 
+we deploy our chart `my-chart`.
+
 ```bash
 $ kad deploy install --name kad --chart my-chart
 Deploying kad from my-chart chart...
@@ -182,6 +199,8 @@ REVISION: 1
 TEST SUITE: None
 Deploy kad completed successfully.
 ```
+
+We can see if our chart was deployed correctly.
 
 ```bash
 $ kad deploy ls
@@ -200,27 +219,23 @@ my-app
 `-- main.go
 ```
 
+
+
 ```bash
 $ kubectl get pods
 NAME                READY   STATUS    RESTARTS   AGE
 statefulset-kad-0   1/1     Running   0          5s
 statefulset-kad-1   1/1     Running   0          4s
-```
 
-```bash
 $ kubectl get statefulset
 NAME              READY   AGE
 statefulset-kad   2/2     17s
-```
 
-```bash
 $ kubectl get configmap
 NAME               DATA   AGE
 configmap-kad      2      23s
 kube-root-ca.crt   1      23s
-```
 
-```bash
 $ kubectl get svc
 NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 service-kad   NodePort   10.43.231.170   <none>        8080:30007/TCP   30s
@@ -235,16 +250,12 @@ Forwarding from [::1]:8080 -> 8080
 ```bash
 $ curl http://127.0.0.1:8080/hello
 Hello "kad" application version "latest"!!!!
-```
 
-```bash
 $ kubectl logs statefulset-kad-0
 Initializing the router...
 Starting server "localhost" on port "8080"...
 2021-07-25 01:30:30.08466222 +0000 UTC m=+252.123298531 received a request.
-```
 
-```bash
 $ kubectl logs statefulset-kad-1
 Initializing the router...
 Starting server "localhost" on port "8080"...
