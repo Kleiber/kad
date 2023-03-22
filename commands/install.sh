@@ -47,7 +47,7 @@ golang_install() {
             curl -LO --silent ${url}
             sudo rm -rf /usr/local/go
             tar xf go${version}.${os_type}-amd64.tar.gz
-            sudo mv ./go /usr/local
+            sudo mv ./go $GOPATH/bin
             rm go${version}.${os_type}-amd64.tar.gz
             echo "Golang version ${version} was installed successfully."
         else
